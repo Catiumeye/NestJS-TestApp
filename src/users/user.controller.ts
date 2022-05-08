@@ -1,12 +1,24 @@
-import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Put,
+  Query, UseFilters,
+  UsePipes
+} from '@nestjs/common';
 import { UserService } from './user.service';
+import { CreateUserDto } from './user.dto';
+import { TestExceptionFilter } from '../filters/TestExceptionFilter';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get(':id')
-  findOne(@Param('id') id) {
+  findOne(@Param('id', ParseIntPipe) id) {
     return this.userService.findOne(id);
   }
 
@@ -15,13 +27,14 @@ export class UserController {
     return this.userService.findAll(conditions);
   }
 
+  @UseFilters(new TestExceptionFilter())
   @Post()
-  createUser(@Body() userData) {
+  createUser(@Body() userData: CreateUserDto) {
     return this.userService.createUser(userData);
   }
 
-  @Put()
-  updateUser(@Body() userData) {
+  @Put(':id')
+  updateUser(@Param('id', ParseIntPipe) id, @Body() userData: CreateUserDto) {
     return this.userService.updateUser(userData);
   }
 }
