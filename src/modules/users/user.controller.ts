@@ -6,12 +6,13 @@ import {
   ParseIntPipe,
   Post,
   Put,
-  Query, UseFilters,
-  UsePipes
+  Query,
+  UseFilters,
+  UsePipes,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './user.dto';
-import { TestExceptionFilter } from '../filters/TestExceptionFilter';
+import { TestExceptionFilter } from '../../filters/TestExceptionFilter';
 
 @Controller('user')
 export class UserController {
@@ -29,7 +30,7 @@ export class UserController {
 
   @UseFilters(new TestExceptionFilter())
   @Post()
-  createUser(@Body() userData: CreateUserDto) {
+  createUser(@Body() userData: Omit<CreateUserDto, 'id'>) {
     return this.userService.createUser(userData);
   }
 

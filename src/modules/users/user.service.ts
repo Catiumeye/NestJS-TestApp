@@ -1,5 +1,5 @@
 import { BadRequestException, HttpStatus, Injectable } from '@nestjs/common';
-import { User } from '../entities/user.entity';
+import { User } from '../../entities/user.entity';
 import { hash } from 'bcrypt';
 
 @Injectable()
@@ -9,7 +9,9 @@ export class UserService {
   }
 
   async findAll(conditions) {
-    return await User.findAndCount();
+    const [users, count] = await User.findAndCount();
+
+    return { users, count };
   }
 
   async createUser({ alias, email, password }) {

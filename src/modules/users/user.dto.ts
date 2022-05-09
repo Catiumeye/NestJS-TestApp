@@ -1,6 +1,8 @@
 import { IsEmail, Length } from 'class-validator';
 
 export class CreateUserDto {
+  id: number;
+
   @Length(3, 16, { message: 'Can be from 3 to 16 symbols' })
   alias: string;
 
