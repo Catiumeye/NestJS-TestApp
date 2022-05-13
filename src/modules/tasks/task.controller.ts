@@ -7,25 +7,29 @@ import {
   Post,
   Put,
   Query,
+  UseFilters,
 } from '@nestjs/common';
 import { TaskService } from './task.service';
+import { TaskDto } from './task.dto';
+import { TestExceptionFilter } from '../../filters/TestExceptionFilter';
 
 @Controller('task')
 export class TaskController {
   constructor(private readonly taskService: TaskService) {}
 
-  @Get()
-  getAllTasks(@Query() conditions) {
-    return this.taskService.getAllTasks(conditions);
-  }
-
   @Get(':userId')
-  getTask(@Param('userId', ParseIntPipe) userId) {
-    return this.taskService.getTask(userId);
+  getAllTasks(@Param('userId', ParseIntPipe) userId, @Query() conditions) {
+    return this.taskService.getAllTasks(userId, conditions);
   }
 
+  @Get(':taskId')
+  getTask(@Param('taskId', ParseIntPipe) taskId) {
+    return this.taskService.getTask(taskId);
+  }
+
+  @UseFilters(new TestExceptionFilter())
   @Post()
-  createTask(@Body() taskData) {
+  createTask(@Body() taskData: Omit<TaskDto, 'status'>) {
     return this.taskService.createTask(taskData);
   }
 

@@ -17,7 +17,7 @@ export class Task extends BaseEntity {
   id: number;
 
   @Column()
-  user_id: number;
+  author_id: number;
 
   @Column({
     type: 'enum',
@@ -39,6 +39,6 @@ export class Task extends BaseEntity {
   updated_at: Timestamp;
 
   @ManyToOne(() => User, (user) => user.tasks)
-  @JoinColumn({ name: 'user_id' })
+  @JoinColumn({ name: 'author_id' })
   user: User;
 }

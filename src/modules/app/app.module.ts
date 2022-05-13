@@ -28,7 +28,7 @@ import { TaskModule } from '../tasks/task.module';
         schema: configService.get('DB_SCHEMA'),
         entities: ['dist/**/*.entity{ .ts,.js}'],
         synchronize: true,
-        logging: false,
+        logging: true,
       }),
       connectionFactory: async (options) => {
         return await createConnection(options);
