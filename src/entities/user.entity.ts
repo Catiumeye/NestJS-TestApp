@@ -22,7 +22,7 @@ export class User extends BaseEntity {
   @Column({ unique: true, nullable: false })
   email: string;
 
-  @Column({ nullable: false })
+  @Column({ select: false, nullable: false })
   passwordHash: string;
 
   @Column({
@@ -35,7 +35,7 @@ export class User extends BaseEntity {
   @CreateDateColumn()
   created_at: Timestamp;
 
-  @DeleteDateColumn()
+  @DeleteDateColumn({ select: false })
   deleted_at: Timestamp;
 
   @OneToMany(() => Task, (tasks) => tasks.user)

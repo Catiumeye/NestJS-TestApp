@@ -6,6 +6,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { createConnection } from 'typeorm';
 import { UserModule } from '../users/user.module';
 import { TaskModule } from '../tasks/task.module';
+import { User } from 'src/entities/user.entity';
+import { Task } from 'src/entities/task.entity';
 
 @Module({
   controllers: [AppController],
@@ -26,7 +28,7 @@ import { TaskModule } from '../tasks/task.module';
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
         schema: configService.get('DB_SCHEMA'),
-        entities: ['dist/**/*.entity{ .ts,.js}'],
+        entities: ['./dist/**/*.entity{.ts,.js}'],
         synchronize: true,
         logging: true,
       }),

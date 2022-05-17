@@ -1,8 +1,8 @@
 import { BadRequestException, HttpStatus, Injectable } from '@nestjs/common';
 import { User } from '../../entities/user.entity';
-import { hash } from 'bcrypt';
+import { hash } from 'bcryptjs';
 import { Task } from '../../entities/task.entity';
-import { getRepository } from 'typeorm';
+import { createQueryBuilder, getRepository } from 'typeorm';
 
 @Injectable()
 export class UserService {
@@ -11,16 +11,20 @@ export class UserService {
   }
 
   async findAll(conditions) {
-    const [users, count] = await User.findAndCount({
-      relations: ['tasks'],
-      select: ['alias', 'id', 'tasks'],
-    });
-    const aboba = await getRepository<User>(User)
-      .createQueryBuilder()
-      .leftJoinAndSelect(Task, 'task', 'user.id = author_id')
-      .getMany();
+    const [users, count] = await createQueryBuilder(User, 'u')
+      .leftJoinAndSelect('u.tasks', 't')
+      .select([
+        'u.alias',
+        'u.email',
+        't.id',
+        't.title',
+        't.description',
+        't.status',
+        't.created_at',
+        't.updated_at',
+      ])
+      .getManyAndCount();
 
-    console.log(aboba);
     return { users, count };
   }
 
